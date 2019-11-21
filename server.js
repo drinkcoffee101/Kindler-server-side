@@ -1,7 +1,7 @@
 const express = require('express')
 const cors = require('cors')
 const mongoose = require('mongoose')
-//imports .env variables
+//imports .env variables/
 require('dotenv').config({path: './backend/.env'})
 
 const app = express()
