@@ -2,7 +2,7 @@ const express = require('express')
 const cors = require('cors')
 const mongoose = require('mongoose')
 //imports .env variables
-require('dotenv').config()
+require('dotenv').config({path: './backend/.env'})
 
 const app = express()
 const port = process.env.PORT || 5000
@@ -19,8 +19,8 @@ connection.once('open', () => {
     console.log('MongoDB database connection established successfully')
 }).then(() => { }).catch(err => console.error(err))
 
-const moviesRouter = require('./routes/movieAPI')
-const resturantsRouter = require('./routes/resturantAPI')
+const moviesRouter = require('./backend/routes/movieAPI')
+const resturantsRouter = require('./backend/routes/resturantAPI')
 
 app.use('/movies', moviesRouter)
 app.use('/resturants', resturantsRouter)
