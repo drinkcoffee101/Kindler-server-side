@@ -594,6 +594,7 @@ let addDataToDB = (data, res, genreArr) => {
 
 let findClosestTheater = (theaters, location, res, movie) => {
     //create destination query 
+    //with a single query, you can map the distance from one point to multiple points 
     let destinationQuery = '';
     theaters.forEach(t => {
         destinationQuery += queryString.stringify({ destinations: t[0].name }).slice(13) + '|'

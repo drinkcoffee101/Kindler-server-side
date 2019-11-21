@@ -8,6 +8,7 @@ const app = express()
 const port = process.env.PORT || 5000
 
 app.use(cors())
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json())
 
 const uri = process.env.ATLAS_URI
@@ -21,9 +22,11 @@ connection.once('open', () => {
 
 const moviesRouter = require('./backend/routes/movieAPI')
 const resturantsRouter = require('./backend/routes/resturantAPI')
+const datesRouter = require('./backend/routes/dateAPI')
 
 app.use('/movies', moviesRouter)
 app.use('/resturants', resturantsRouter)
+app.use('/date', datesRouter)
 
 app.listen(port, () => {
     console.log(`Server is running on port: ${port}`)

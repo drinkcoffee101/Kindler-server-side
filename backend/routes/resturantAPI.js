@@ -594,6 +594,7 @@ let getFoodPictures = arr => {
     }
     return pics
 }
+
 /*=====  End of Helper functions   ======*/
 
 
@@ -615,7 +616,7 @@ let getFoodPictures = arr => {
 router.route('/get_resturants').get((req, res) => {
     /*
         User - defines cuisine, sortBy (location, price, rating)
-        Controller - provides location, offest (start at 0) by 5(?) if user decides to reshuffle
+        Controller - provides location (lat, long), offest (start at 0) by 5(?) if user decides to reshuffle
     */
     const { cuisine, sortBy, location, offset } = req.body
 
@@ -646,6 +647,9 @@ router.route('/get_resturants').get((req, res) => {
                 }
                 generatedResturants.push(newResturant)
             });
+
+            //order the resturants by distance from the user
+
             res.json(generatedResturants)
         })
         .catch(err => {
@@ -673,45 +677,51 @@ router.route('/store_resturant').post((req, res) => {
     Resturant.create(newResturant)
         //scrape and add the menu
         .then(dbResturant => {
-            // res.json(dbResturant)
-            const nightmare = Nightmare();
-            nightmare
-                .useragent("Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/38.0.2125.111 Safari/537.36")
-                .goto(`${dbResturant.menu_link}`)
-                .evaluate(() => { return document.querySelector('#menu-container').innerHTML })
-                .end()
-                .then(function (html) {
-                    const $ = cheerio.load(html);
+            res.json(dbResturant)
 
-                    let menuImg = $('#menu-image').find('img').attr('src')
-                    if (menuImg === undefined) {
-                        let menu = []
-                        $('.text-menu-cat').each((i, item) => {
+            /*=============================================
+            =            Nightmare call to pull menu (does not work on heroku server)            =
+            =============================================*/
+            // const nightmare = Nightmare();
+            // nightmare
+            //     .useragent("Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/38.0.2125.111 Safari/537.36")
+            //     .goto(`${dbResturant.menu_link}`)
+            //     .evaluate(() => { return document.querySelector('#menu-container').innerHTML })
+            //     .end()
+            //     .then(function (html) {
+            //         const $ = cheerio.load(html);
 
-                            let menuCategory = {
-                                category: $(item).find('.category_name').text(),
-                                food_items: []
-                            }
+            //         let menuImg = $('#menu-image').find('img').attr('src')
+            //         if (menuImg === undefined) {
+            //             let menu = []
+            //             $('.text-menu-cat').each((i, item) => {
 
-                            $(item).find('.tmi-text-group').each((i, el) => {
-                                let foodItem = {
-                                    name: $(el).find('.tmi-name').text().replace(/\n/gi, '').split('$')[0].trim(),
-                                    price: $(el).find('.tmi-price-txt').text().replace(/\n/gi, '').trim(),
-                                    desc: $(el).find('.tmi-desc-text').text().replace(/\n/gi, '').trim()
-                                }
-                                menuCategory.food_items.push(foodItem)
-                            })
-                            menu.push(menuCategory)
-                        })
-                        res.json(menu)
-                    }
-                    else {
-                        res.json(menuImg)
-                    }
-                })
-                .catch(error => {
-                    console.error('Search failed:', error)
-                })
+            //                 let menuCategory = {
+            //                     category: $(item).find('.category_name').text(),
+            //                     food_items: []
+            //                 }
+
+            //                 $(item).find('.tmi-text-group').each((i, el) => {
+            //                     let foodItem = {
+            //                         name: $(el).find('.tmi-name').text().replace(/\n/gi, '').split('$')[0].trim(),
+            //                         price: $(el).find('.tmi-price-txt').text().replace(/\n/gi, '').trim(),
+            //                         desc: $(el).find('.tmi-desc-text').text().replace(/\n/gi, '').trim()
+            //                     }
+            //                     menuCategory.food_items.push(foodItem)
+            //                 })
+            //                 menu.push(menuCategory)
+            //             })
+            //             res.json(menu)
+            //         }
+            //         else {
+            //             res.json(menuImg)
+            //         }
+            //     })
+            //     .catch(error => {
+            //         console.error('Search failed:', error)
+            //     })
+            /*=====  End of Nightmare call to pull menu (does not work on heroku server)  ======*/
+
         })
         .catch(err => res.status(400).json('Error: ' + err))
 })
