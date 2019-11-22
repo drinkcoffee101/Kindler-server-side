@@ -341,6 +341,7 @@ let test = [{
     address: '600 Pine S., Seattle, WA 98101 '
 }]
 
+//TODO: Make it so you read these from a JSON file. This will be deleted 
 let genres = [
     {
         "id": 28,
@@ -419,6 +420,37 @@ let genres = [
         "name": "Western"
     }
 ]
+
+let testDateChange1 = [{
+    name: 'Joker',
+    times: ['2:40p', '6:40p'],
+    date: '2019-11-19',
+    poster:
+        'https://images.fandango.com/ImageRenderer/200/0/redesign/static/img/default_poster.png/0/images/MasterRepository/fandango/214548/JOKER_VERT_MAIN_DOM_2764x4096_master.jpg',
+    links:
+        ['https://tickets.fandango.com/Transaction/Ticketing/ticketboxoffice.aspx?row_count=301102603&tid=aaiya&sdate=2019-11-18+13:40&mid=214548&from=mov_det_showtimes',
+            'https://tickets.fandango.com/Transaction/Ticketing/ticketboxoffice.aspx?row_count=301060434&tid=aaiya&sdate=2019-11-18+16:40&mid=214548&from=mov_det_showtimes']
+},
+{
+    theaterName: 'AMC PACIFIC PLACE 11',
+    address: '600 Pine S., Seattle, WA 98101'
+}]
+
+let testDateChange2 = [{
+    name: 'Joker',
+    times: ['2:30p', '5:30p', '10:15p'],
+    date: '2019-11-19',
+    poster:
+        'https://images.fandango.com/ImageRenderer/200/0/redesign/static/img/default_poster.png/0/images/MasterRepository/fandango/214548/JOKER_VERT_MAIN_DOM_2764x4096_master.jpg',
+    links:
+        ['https://tickets.fandango.com/Transaction/Ticketing/ticketboxoffice.aspx?row_count=300509444&tid=aapbq&sdate=2019-11-18+12:30&mid=214548&from=mov_det_showtimes',
+            'https://tickets.fandango.com/Transaction/Ticketing/ticketboxoffice.aspx?row_count=300509447&tid=aapbq&sdate=2019-11-18+15:30&mid=214548&from=mov_det_showtimes',
+            'https://tickets.fandango.com/Transaction/Ticketing/ticketboxoffice.aspx?row_count=300509452&tid=aapbq&sdate=2019-11-18+19:15&mid=214548&from=mov_det_showtimes']
+},
+{
+    theaterName: 'MAJESTIC BAY THEATRE',
+    address: '2044 N.W. Market St., Seattle, WA 98107'
+}]
 
 let getMovieInfo = (theater, dates) => {
     let nightmare = Nightmare();
@@ -592,7 +624,7 @@ let addDataToDB = (data, res, genreArr) => {
     })
 }
 
-let findClosestTheater = (theaters, location, res, movie) => {
+let findClosestTheater = (theaters, location, res, movie, date) => {
     //create destination query 
     //with a single query, you can map the distance from one point to multiple points 
     let destinationQuery = '';
@@ -611,7 +643,7 @@ let findClosestTheater = (theaters, location, res, movie) => {
             Theater.find({ _id: theaters[indexOfShortestDistance][0]._id })
                 .populate({
                     path: 'movies',
-                    match: { name: movie }
+                    match: { name: movie, date: date }
                 })
                 .then(theater => res.json(theater))
                 .catch(err => {
@@ -639,9 +671,11 @@ router.route('/scrape').get((req, res) => {
     //     })
     // })
     // addDataToDB(test1, res, genres)
-    addDataToDB(test1, res, genres)
+    addDataToDB(testDateChange2, res, genres)
 
 })
+
+
 
 //route to randomly get movie by genre 
 //:genre is case sensitve 
@@ -658,22 +692,24 @@ router.route('/get_movies/:genre').get((req, res) => {
             }
 
             //now randomly return one item in the array 
-            const randomNumber = Math.floor(Math.random() * filtered.length - 1)
+            // const randomNumber = Math.floor(Math.random() * filtered.length - 1)
 
-            res.json(filtered[randomNumber])
+            //return only 5 items 
+            res.json(filtered.slice(0, 5))
         })
         .catch(err => {
             res.status(400).json('Error: ' + err)
         })
 })
 
-//after user chooses the movie they would like to see, find the showing that is closest to them
+//after user chooses the movie they would like to see, find the showing that is closest to them (and the correct date)
 //make sure to get the ID of the movie document after they hit the card?
 router.route('/get_movie_theater').get((req, res) => {
-    const { movie, location } = req.body
+    const { movie, location, date } = req.body
 
-    Movie.find({ name: { $in: movie } })
+    Movie.find({ name: { $in: movie }, date: date })
         .then(movies => {
+            console.log(movies)
             //now pull the associated theaters 
             let availableTheaters = []
             let movieCount = movies.length
@@ -684,7 +720,7 @@ router.route('/get_movie_theater').get((req, res) => {
                         count++
                         availableTheaters.push(theater)
                         if (count === movieCount) {
-                            findClosestTheater(availableTheaters, location, res, movie)
+                            findClosestTheater(availableTheaters, location, res, movie, date)
                         }
                     })
                     .catch(err => {
@@ -714,8 +750,8 @@ Current Issues:
 -Extra data (genre, description, etc.) not always loaded when creating movie entries
 
 TODO:
--test this using a nightmare call to populate the db with data 
-    -make sure each local theater works with the scrape function 
+-test this using a nightmare call to populate the db with data
+    -make sure each local theater works with the scrape function
 
 
 */

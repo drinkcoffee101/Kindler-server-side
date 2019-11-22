@@ -18,6 +18,8 @@ let config = {
     }
 }
 
+//TODO: Make it so you read these from a JSON file. This will be deleted 
+
 let cuisines = [
     {
         "cuisine": {
@@ -603,7 +605,6 @@ let getFoodPictures = arr => {
 =============================================*/
 //route that gets 5 resturants 
 /* 
--sort the returned array by user distance 
 -should be able to check if the user has selected that resturant already 
     -try to add another entry if so 
 -if none are choose, give the user the option to reselect 

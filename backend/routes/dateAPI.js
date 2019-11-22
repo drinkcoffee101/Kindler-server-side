@@ -31,31 +31,51 @@ router.route('/create_user').post((req, res) => {
 //this is like after they hit submit. 
 //test resturantID: 5dd4befc6e550a0b74d6cd2d
 //test movieID: 5dd1d5bc042c8e4b4cd986e1
+//test userID: 5dd625cd294dd35110a02b74
 //a post route that adds the movie and resturant to the user date (just grab the IDs)
 router.route('/add_date').post((req, res) => {
-    // TODO: add the event/music eventually
+    // TODO: add the events option
+    // TODO: add the 'stay in' options
 
-    const { restutantID, movieID } = req.body
+    const { resturantID, movieID, userID } = req.body
 
     const newDate = {
-        resturant: restutantID,
-        movie: movieID
+        resturants: resturantID,
+        movies: movieID
     }
-
-    //TODO: will want to assocate the date with the user //
-
+    //add the date to the db
     UserDate.create(newDate)
         .then(dbDate => {
-            res.json(dbDate)
+            //assocate the date with the user
+            // res.json(dbDate)
+            User.findOneAndUpdate({ _id: userID }, { $push: { dates: dbDate.id } })
+                .then(dbUser => {
+                    res.json(dbUser)
+                })
+                .catch(err => res.status(400).json('Error: ' + err))
         })
         .catch(err => res.status(400).json('Error: ' + err))
 })
 
 
-//a route that gets the users date and populate everything 
-
-
-
+//a route that gets the users date and populates each date and the info assocsted with each date activity
+//test userID: 5dd625cd294dd35110a02b74
+router.route('/all_dates/:userID').get((req, res) => {
+    User.find({ _id: req.params.userID })
+        .populate({
+            path: 'dates',
+            populate: [{
+                path: 'resturants'
+            }, {
+                path: 'movies'
+            }]
+        })
+        .sort({ _id: 1 })
+        .then(dbUser => {
+            res.json(dbUser)
+        })
+        .catch(err => res.status(400).json('Error: ' + err))
+})
 /*=====  End of Routes  ======*/
 
 
