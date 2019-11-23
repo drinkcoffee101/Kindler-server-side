@@ -32,16 +32,18 @@ router.route('/create_user').post((req, res) => {
 //test resturantID: 5dd4befc6e550a0b74d6cd2d
 //test movieID: 5dd1d5bc042c8e4b4cd986e1
 //test userID: 5dd625cd294dd35110a02b74
-//a post route that adds the movie and resturant to the user date (just grab the IDs)
+//test eventID: 5dd8db4c7156522884c0b999
+//a post route that adds the movie, resturant, and event to the user date (just grab the IDs)
 router.route('/add_date').post((req, res) => {
     // TODO: add the events option
     // TODO: add the 'stay in' options
 
-    const { resturantID, movieID, userID } = req.body
+    const { resturantID, movieID, eventID, userID } = req.body
 
     const newDate = {
         resturants: resturantID,
-        movies: movieID
+        movies: movieID,
+        events: eventID
     }
     //add the date to the db
     UserDate.create(newDate)
@@ -68,6 +70,8 @@ router.route('/all_dates/:userID').get((req, res) => {
                 path: 'resturants'
             }, {
                 path: 'movies'
+            }, {
+                path: 'events'
             }]
         })
         .sort({ _id: 1 })

@@ -23,10 +23,12 @@ connection.once('open', () => {
 const moviesRouter = require('./backend/routes/movieAPI')
 const resturantsRouter = require('./backend/routes/resturantAPI')
 const datesRouter = require('./backend/routes/dateAPI')
+const eventsRouter = require('./backend/routes/eventAPI')
 
 app.use('/movies', moviesRouter)
 app.use('/resturants', resturantsRouter)
 app.use('/date', datesRouter)
+app.use('/events', eventsRouter)
 
 app.listen(port, () => {
     console.log(`Server is running on port: ${port}`)

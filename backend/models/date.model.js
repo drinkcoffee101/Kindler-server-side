@@ -10,6 +10,10 @@ const dateSchema = new Schema({
     movies: {
         type: Schema.Types.ObjectId,
         ref: 'Movie'
+    },
+    events: {
+        type: Schema.Types.ObjectId,
+        ref: 'Event'
     }
 })
 
