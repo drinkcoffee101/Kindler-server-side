@@ -27,15 +27,12 @@ router.route('/create_user').post((req, res) => {
         .catch(err => res.status(400).json('Error: ' + err))
 })
 
-
-//this is like after they hit submit. 
 //test resturantID: 5dd4befc6e550a0b74d6cd2d
 //test movieID: 5dd1d5bc042c8e4b4cd986e1
 //test userID: 5dd625cd294dd35110a02b74
 //test eventID: 5dd8db4c7156522884c0b999
 //a post route that adds the movie, resturant, and event to the user date (just grab the IDs)
 router.route('/add_date').post((req, res) => {
-    // TODO: add the events option
     // TODO: add the 'stay in' options
 
     const { resturantID, movieID, eventID, userID } = req.body

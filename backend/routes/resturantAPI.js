@@ -589,7 +589,7 @@ let getFoodPictures = arr => {
     let pics = []
     let count = 0
     //want 5 pictures from the object 
-    while (count < 10) {
+    while (count < 5) {
         //get the pic
         pics.push(arr[count].photo.thumb_url)
         ++count
@@ -607,10 +607,6 @@ let getFoodPictures = arr => {
 /* 
 -should be able to check if the user has selected that resturant already 
     -try to add another entry if so 
--if none are choose, give the user the option to reselect 
-    -this should increment the offset by 5 and then re-search (the axios call should probably be its own function)
-
--add the menu to the db with the resturant (add filed for text menu vs img menu)
 */
 
 //generate 5 search results for the user 
@@ -636,13 +632,15 @@ router.route('/get_resturants').get((req, res) => {
             let generatedResturants = []
             //contruct resturant models 
             result.data.restaurants.forEach(r => {
+
                 let newResturant = {
                     name: r.restaurant.name,
                     location: r.restaurant.location.address,
                     times: r.restaurant.timings,
                     thumbnail: r.restaurant.featured_image,
                     rating: r.restaurant.user_rating.aggregate_rating,
-                    food_photos: getFoodPictures(r.restaurant.photos),
+                    food_photos: getFoodPictures(r.restaurant.photos
+                    ),
                     phone: r.restaurant.phone_numbers,
                     menu_link: r.restaurant.menu_url
                 }
@@ -679,50 +677,6 @@ router.route('/store_resturant').post((req, res) => {
         //scrape and add the menu
         .then(dbResturant => {
             res.json(dbResturant)
-
-            /*=============================================
-            =            Nightmare call to pull menu (does not work on heroku server)            =
-            =============================================*/
-            // const nightmare = Nightmare();
-            // nightmare
-            //     .useragent("Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/38.0.2125.111 Safari/537.36")
-            //     .goto(`${dbResturant.menu_link}`)
-            //     .evaluate(() => { return document.querySelector('#menu-container').innerHTML })
-            //     .end()
-            //     .then(function (html) {
-            //         const $ = cheerio.load(html);
-
-            //         let menuImg = $('#menu-image').find('img').attr('src')
-            //         if (menuImg === undefined) {
-            //             let menu = []
-            //             $('.text-menu-cat').each((i, item) => {
-
-            //                 let menuCategory = {
-            //                     category: $(item).find('.category_name').text(),
-            //                     food_items: []
-            //                 }
-
-            //                 $(item).find('.tmi-text-group').each((i, el) => {
-            //                     let foodItem = {
-            //                         name: $(el).find('.tmi-name').text().replace(/\n/gi, '').split('$')[0].trim(),
-            //                         price: $(el).find('.tmi-price-txt').text().replace(/\n/gi, '').trim(),
-            //                         desc: $(el).find('.tmi-desc-text').text().replace(/\n/gi, '').trim()
-            //                     }
-            //                     menuCategory.food_items.push(foodItem)
-            //                 })
-            //                 menu.push(menuCategory)
-            //             })
-            //             res.json(menu)
-            //         }
-            //         else {
-            //             res.json(menuImg)
-            //         }
-            //     })
-            //     .catch(error => {
-            //         console.error('Search failed:', error)
-            //     })
-            /*=====  End of Nightmare call to pull menu (does not work on heroku server)  ======*/
-
         })
         .catch(err => res.status(400).json('Error: ' + err))
 })
