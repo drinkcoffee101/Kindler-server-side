@@ -590,9 +590,15 @@ let getFoodPictures = arr => {
     let count = 0
     //want 5 pictures from the object 
     while (count < 5) {
-        //get the pic
-        pics.push(arr[count].photo.thumb_url)
-        ++count
+        //check if the restaurant has photos 
+        if (arr.photos !== undefined) {
+            //if the photos array is shorter than 5, it will return undefined at index = count 
+            if (arr.photos[count] !== undefined) {
+                //store the photo 
+                pics.push(arr.photos[count].photo.thumb_url)
+            }
+            ++count
+        }
     }
     return pics
 }
