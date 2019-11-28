@@ -18,7 +18,7 @@ let config = {
     }
 }
 
-//TODO: Make it so you read these from a JSON file. This will be deleted 
+//TODO: Make it so you read these from a JSON file. This will be deleted /
 
 let cuisines = [
     {
