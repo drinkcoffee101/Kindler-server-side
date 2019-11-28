@@ -173,6 +173,7 @@ router.route('/find_events').get((req, res) => {
 
     axios.get(`https://app.ticketmaster.com/discovery/v2/events.json?city=seattle&localStartDateTime=${date}T00:00:00,${date}T23:00:00&size=5&classificationName=${classification}&genreId=${findID(genre, classification)}&apikey=${process.env.EVENT_KEY}`)
         .then(result => {
+            // res.json(result.data)
             //if the search returns something
             if (result.data._embedded != undefined) {
                 let data = result.data._embedded.events

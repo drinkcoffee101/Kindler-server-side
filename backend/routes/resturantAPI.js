@@ -18,7 +18,7 @@ let config = {
     }
 }
 
-//TODO: Make it so you read these from a JSON file. This will be deleted /
+//TODO: Make it so you read these from a JSON file. This will be deleted 
 
 let cuisines = [
     {
@@ -588,16 +588,24 @@ let testResturant = {
 let getFoodPictures = arr => {
     let pics = []
     let count = 0
-    //want 5 pictures from the object 
-    while (count < 5) {
-        //check if the restaurant has photos 
-        if (arr.photos !== undefined) {
-            //if the photos array is shorter than 5, it will return undefined at index = count 
-            if (arr.photos[count] !== undefined) {
-                //store the photo 
-                pics.push(arr.photos[count].photo.thumb_url)
-            }
-            ++count
+    // //want 5 pictures from the object 
+    // while (count < 5) {
+    //     //check if the restaurant has photos 
+    //     if (arr.photos !== undefined) {
+    //         //if the photos array is shorter than 5, it will return undefined at index = count 
+    //         if (arr.photos[count] !== undefined) {
+    //             //store the photo 
+    //             pics.push(arr.photos[count].photo.thumb_url)
+    //         }
+    //         count++
+    //     }
+    //     count++
+    // }
+    // return pics
+    for (let i = 0; i < arr.length; i++) {
+        pics.push(arr[i].photo.thumb_url)
+        if (pics.length > 4) {
+            return pics
         }
     }
     return pics
