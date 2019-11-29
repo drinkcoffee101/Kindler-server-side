@@ -629,7 +629,7 @@ router.route('/get_resturants').get((req, res) => {
         User - defines cuisine, sortBy (location, price, rating)
         Controller - provides location (lat, long), offest (start at 0) by 5(?) if user decides to reshuffle
     */
-    const { cuisine, sortBy, location, offset } = req.body
+    let { cuisine, sortBy, location, offset } = req.body
 
     //convert the cuisine to the id
     for (let i = 0; i < cuisines.length; i++) {
