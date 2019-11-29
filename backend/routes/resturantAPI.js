@@ -640,7 +640,7 @@ router.route('/get_resturants').get((req, res) => {
         }
     }
 
-    axios.get(`https://developers.zomato.com/api/v2.1/search?entity_id=279&entity_type=city&count=5&cuisines=${cuisineID}&sort=${sortBy}&start=${offset}`, config)
+    axios.post(`https://developers.zomato.com/api/v2.1/search?entity_id=279&entity_type=city&count=5&cuisines=${cuisineID}&sort=${sortBy}&start=${offset}`, config)
         .then(result => {
 
             let generatedResturants = []
