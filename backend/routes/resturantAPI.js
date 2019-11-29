@@ -624,7 +624,7 @@ let getFoodPictures = arr => {
 */
 
 //generate 5 search results for the user 
-router.route('/get_resturants').get((req, res) => {
+router.route('/get_resturants').post((req, res) => {
     /*
         User - defines cuisine, sortBy (location, price, rating)
         Controller - provides location (lat, long), offest (start at 0) by 5(?) if user decides to reshuffle
@@ -640,7 +640,7 @@ router.route('/get_resturants').get((req, res) => {
         }
     }
 
-    axios.post(`https://developers.zomato.com/api/v2.1/search?entity_id=279&entity_type=city&count=5&cuisines=${cuisineID}&sort=${sortBy}&start=${offset}`, config)
+    axios.get(`https://developers.zomato.com/api/v2.1/search?entity_id=279&entity_type=city&count=5&cuisines=${cuisineID}&sort=${sortBy}&start=${offset}`, config)
         .then(result => {
 
             let generatedResturants = []
