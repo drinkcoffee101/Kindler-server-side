@@ -169,7 +169,7 @@ let findID = (genre, classification) => {
 =============================================*/
 //get route to search all of Seattle by classification and muisc/sport/art ID
 router.route('/find_events').get((req, res) => {
-    const { date, classification, genre } = req.body
+    const { date, classification, genre } = req.params
 
     axios.get(`https://app.ticketmaster.com/discovery/v2/events.json?city=seattle&localStartDateTime=${date}T00:00:00,${date}T23:00:00&size=5&classificationName=${classification}&genreId=${findID(genre, classification)}&apikey=${process.env.EVENT_KEY}`)
         .then(result => {
