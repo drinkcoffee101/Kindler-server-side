@@ -60,7 +60,7 @@ router.route('/add_date').post((req, res) => {
 //a route that gets the users date and populates each date and the info assocsted with each date activity
 //test userID: 5dd625cd294dd35110a02b74
 router.route('/all_dates/:userID').get((req, res) => {
-    User.find({ _id: req.params.userID })
+    User.find({ auth_return: req.params.userID })
         .populate({
             path: 'dates',
             populate: [{
