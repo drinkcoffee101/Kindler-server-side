@@ -11,6 +11,12 @@ const User = require('../models/user.model')
 /*=============================================
 =            Routes            =
 =============================================*/
+//see if user exsists 
+router.route('/find_user/:auth').get((req, res) => {
+    User.find({ auth_return: req.params.auth })
+        .then(dbUser => res.json(dbUser))
+        .catch(err => res.status(400).json('Error: ' + err))
+})
 //create a user
 router.route('/create_user').post((req, res) => {
     const { name, auth } = req.body
