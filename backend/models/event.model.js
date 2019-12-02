@@ -10,7 +10,8 @@ const eventSchema = new Schema({
     venue: { type: String },
     image: { type: String },
     address: { type: String },
-    date: { type: String }
+    date: { type: String },
+    type: { type: String }
 })
 
 let Event = mongoose.model('Event', eventSchema)

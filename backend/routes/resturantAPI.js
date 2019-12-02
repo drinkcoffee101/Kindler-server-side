@@ -674,7 +674,7 @@ router.route('/get_resturants').post((req, res) => {
 //so once the user selects the resturant, store into db, and return ID of the document so we can store and associate with date model
 router.route('/store_resturant').post((req, res) => {
     //will recieve these values
-    const { name, location, times, thumbnail, rating, food_photos, phone, menu_link } = req.body
+    const { name, location, times, thumbnail, rating, food_photos, phone, menu_link, cuisine } = req.body
 
     const newResturant = {
         name: name,
@@ -684,7 +684,8 @@ router.route('/store_resturant').post((req, res) => {
         rating: rating,
         food_photos: food_photos,
         phone: phone,
-        menu_link: menu_link
+        menu_link: menu_link,
+        type: cuisine
     }
     //add the selected resturant to the db
     Resturant.create(newResturant)

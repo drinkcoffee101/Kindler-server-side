@@ -198,7 +198,7 @@ router.route('/find_events').post((req, res) => {
 
 //post route to add the selection to the db
 router.route('/store_event').post((req, res) => {
-    const { name, link, time, price, venue, image, address, date } = req.body
+    const { name, link, time, price, venue, image, address, date, classification } = req.body
 
     const newEvent = {
         name: name,
@@ -208,7 +208,8 @@ router.route('/store_event').post((req, res) => {
         venue: venue,
         image: image,
         address: address,
-        date: date
+        date: date,
+        type: classification
     }
 
     Event.create(newEvent)

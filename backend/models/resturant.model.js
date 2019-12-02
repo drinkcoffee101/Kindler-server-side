@@ -10,7 +10,8 @@ const resturantSchema = new Schema({
     rating: { type: String, required: true },
     food_photos: { type: Array },
     phone: { type: String },
-    menu_link: { type: String }
+    menu_link: { type: String },
+    type: { type: String }
 })
 
 let Resturant = mongoose.model('Resturant', resturantSchema)
