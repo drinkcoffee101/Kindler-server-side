@@ -52,7 +52,7 @@ router.route('/add_date').post((req, res) => {
         resturants: resturantID,
         movies: movieID,
         events: eventID,
-        date_created: now.toString().slice(0, -42)
+        date_created: now.toString().slice(0, 11)
     }
     //add the date to the db
     UserDate.create(newDate)
