@@ -14,7 +14,8 @@ const dateSchema = new Schema({
     events: {
         type: Schema.Types.ObjectId,
         ref: 'Event'
-    }
+    },
+    date_created: { type: String }
 })
 
 let UserDate = mongoose.model('Date', dateSchema)

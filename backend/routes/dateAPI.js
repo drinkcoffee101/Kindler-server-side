@@ -1,5 +1,6 @@
 const router = require('express').Router()
 const axios = require('axios')
+const date = require('date-and-time');
 
 
 //models
@@ -42,17 +43,21 @@ router.route('/add_date').post((req, res) => {
     // TODO: add the 'stay in' options
 
     const { resturantID, movieID, eventID, userID } = req.body
+    //generates the current date
+    const now = new Date();
+    date.format(now, 'ddd., MMM. DD YYYY');
+
 
     const newDate = {
         resturants: resturantID,
         movies: movieID,
-        events: eventID
+        events: eventID,
+        date_created: now.toString().slice(0, -42)
     }
     //add the date to the db
     UserDate.create(newDate)
         .then(dbDate => {
             //assocate the date with the user
-            // res.json(dbDate)
             User.findOneAndUpdate({ _id: userID }, { $push: { dates: dbDate.id } })
                 .then(dbUser => {
                     res.json(dbUser)
@@ -79,6 +84,12 @@ router.route('/all_dates/:userID').get((req, res) => {
         })
         .sort({ _id: 1 })
         .then(dbUser => {
+            // //write a function that looks at each objet _id and inserts the date_created to that object 
+            // dbUser[0].dates.forEach(item => {
+            //     let creationDate = item._id.getTimestamp().toString().slice(0, -42)
+            //     item.date_created = creationDate
+            // });
+
             res.json(dbUser)
         })
         .catch(err => res.status(400).json('Error: ' + err))
