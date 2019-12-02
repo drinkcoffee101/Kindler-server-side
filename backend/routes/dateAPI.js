@@ -79,12 +79,6 @@ router.route('/all_dates/:userID').get((req, res) => {
         })
         .sort({ _id: 1 })
         .then(dbUser => {
-            //write a function that looks at each objet _id and inserts the date_created to that object 
-            dbUser[0].dates.forEach(item => {
-                let creationDate = item._id.getTimestamp().toString().slice(0, -42)
-                item.date_created = creationDate
-            });
-
             res.json(dbUser)
         })
         .catch(err => res.status(400).json('Error: ' + err))
