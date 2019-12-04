@@ -9,8 +9,8 @@ require('dotenv').config()
 const Theater = require('../models/theater.model')
 const Movie = require('../models/movie.model')
 /*=====  Test entries  ======*/
-let theaters = ['AMC PACIFIC PLACE 11']
-let dates = ['2019-11-17']
+let theaters = ['AMC OAK TREE 6']
+let dates = ['2019-12-07']
 /*=============================================
 =            Helper Functions            =
 =============================================*/
@@ -452,7 +452,7 @@ let testDateChange2 = [{
     address: '2044 N.W. Market St., Seattle, WA 98107'
 }]
 
-let getMovieInfo = (theater, dates) => {
+let getMovieInfo = (theater, dates, res) => {
     let nightmare = Nightmare();
     nightmare
         .goto(`https://www.fandango.com/`)
@@ -518,14 +518,14 @@ let getMovieInfo = (theater, dates) => {
                         theaterName: theater,
                         address: address
                     })
-                    // console.log(moviesAndTimes)
-                    return moviesAndTimes
+                    console.log(moviesAndTimes)
+                    // return moviesAndTimes
 
                     /*=============================================
                     =            Add data to database           =
                     =============================================*/
 
-
+                    addDataToDB(moviesAndTimes, res, genres)
 
                     /*=====  End of Add data to  ======*/
 
@@ -661,17 +661,20 @@ let findClosestTheater = (theaters, location, res, movie, date) => {
 /*=============================================
 =            Routes            =
 =============================================*/
+
 //scrape route to get moive theater and associated movies 
 router.route('/scrape').get((req, res) => {
     //searches each theater and then the provided dates
-    // theaters.forEach(theater => {
-    //     // getMovieInfo(theater, dates)
-    //     dates.forEach(date => {
-    //         getMovieInfo(theater, date)
-    //     })
-    // })
+    theaters.forEach(theater => {
+        // getMovieInfo(theater, dates)
+        dates.forEach(date => {
+            // addDataToDB(getMovieInfo(theater, date), res, genres)
+            getMovieInfo(theater, date, res)
+        })
+    })
+    // res.json('Hi')
     // addDataToDB(test1, res, genres)
-    addDataToDB(testDateChange2, res, genres)
+    // addDataToDB(testDateChange2, res, genres)
 
 })
 
@@ -733,6 +736,14 @@ router.route('/get_movie_theater').post((req, res) => {
         })
 })
 
+
+router.route('/get_theater/:movieID').get((req, res) => {
+    Theater.find({ movies: { _id: req.params.movieID } }).
+        then(dbTheater => res.json(dbTheater))
+        .catch(err => {
+            res.status(400).json('Error: ' + err)
+        })
+})
 
 
 /*=====  End of Routes  ======*/
