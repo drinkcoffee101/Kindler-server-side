@@ -704,7 +704,7 @@ router.route('/get_movies/:genre').get((req, res) => {
 
 //after user chooses the movie they would like to see, find the showing that is closest to them (and the correct date)
 //make sure to get the ID of the movie document after they hit the card?
-router.route('/get_movie_theater').get((req, res) => {
+router.route('/get_movie_theater').post((req, res) => {
     const { movie, location, date } = req.body
 
     Movie.find({ name: { $in: movie }, date: date })
