@@ -52,7 +52,7 @@ router.route('/add_date').post((req, res) => {
         resturants: resturantID,
         movies: movieID,
         events: eventID,
-        date_created: now.toString().slice(0, 11)
+        date_created: now.toString().slice(0, 17)
     }
     //add the date to the db
     UserDate.create(newDate)
@@ -82,7 +82,7 @@ router.route('/all_dates/:userID').get((req, res) => {
                 path: 'events'
             }]
         })
-        .sort({ _id: 1 })
+        .sort({ _id: -1 })
         .then(dbUser => {
             // //write a function that looks at each objet _id and inserts the date_created to that object 
             // dbUser[0].dates.forEach(item => {
