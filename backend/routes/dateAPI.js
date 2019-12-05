@@ -81,8 +81,8 @@ router.route('/all_dates/:userID').get((req, res) => {
             }, {
                 path: 'events'
             }],
-            options: { sort: { '_id': 1 } }
-        })
+            options: { sort: { _id: 1 } }
+        }, { sort: { _id: 1 } })
         .sort({ '_id': 1 })
         .then(dbUser => {
             // //write a function that looks at each objet _id and inserts the date_created to that object 
