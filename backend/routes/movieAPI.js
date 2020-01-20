@@ -9,8 +9,8 @@ require('dotenv').config()
 const Theater = require('../models/theater.model')
 const Movie = require('../models/movie.model')
 /*=====  Test entries  ======*/
-let theaters = ['AMC OAK TREE 6']
-let dates = ['2019-12-07']
+let theaters = ['REGAL MERIDIAN & 4DX']
+let dates = ['2019-12-13']
 /*=============================================
 =            Helper Functions            =
 =============================================*/
@@ -456,6 +456,7 @@ let getMovieInfo = (theater, dates, res) => {
     let nightmare = Nightmare();
     nightmare
         .goto(`https://www.fandango.com/`)
+        .wait(3000)
         .type('.style-search', theater)
         .click('.fan-btn-style-go')
         .wait(3000)
@@ -677,8 +678,6 @@ router.route('/scrape').get((req, res) => {
     // addDataToDB(testDateChange2, res, genres)
 
 })
-
-
 
 //route to randomly get movie by genre 
 //:genre is case sensitve 

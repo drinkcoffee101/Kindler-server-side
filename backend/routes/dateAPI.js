@@ -34,10 +34,6 @@ router.route('/create_user').post((req, res) => {
         .catch(err => res.status(400).json('Error: ' + err))
 })
 
-//test resturantID: 5dd4befc6e550a0b74d6cd2d
-//test movieID: 5dd1d5bc042c8e4b4cd986e1
-//test userID: 5dd625cd294dd35110a02b74
-//test eventID: 5dd8db4c7156522884c0b999
 //a post route that adds the movie, resturant, and event to the user date (just grab the IDs)
 router.route('/add_date').post((req, res) => {
     // TODO: add the 'stay in' options
@@ -66,10 +62,7 @@ router.route('/add_date').post((req, res) => {
         })
         .catch(err => res.status(400).json('Error: ' + err))
 })
-
-
 //a route that gets the users date and populates each date and the info assocsted with each date activity
-//test userID: 5dd625cd294dd35110a02b74
 router.route('/all_dates/:userID').get((req, res) => {
     User.find({ _id: req.params.userID })
         .populate({
@@ -85,19 +78,11 @@ router.route('/all_dates/:userID').get((req, res) => {
         })
         .sort({ '_id': 1 })
         .then(dbUser => {
-            // //write a function that looks at each objet _id and inserts the date_created to that object 
-            // dbUser[0].dates.forEach(item => {
-            //     let creationDate = item._id.getTimestamp().toString().slice(0, -42)
-            //     item.date_created = creationDate
-            // });
-
             res.json(dbUser)
         })
         .catch(err => res.status(400).json('Error: ' + err))
 })
 /*=====  End of Routes  ======*/
-
-
 
 
 // Export routes for server.js to use.
